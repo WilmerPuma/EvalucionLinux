@@ -1,8 +1,6 @@
 ---
-- name: Crear directorio
+- name: Instalar paquetes para PostgreSQL
   hosts: tu_host
+  become: true
   tasks:
-    - name: Crear directorio
-      file:
-        path: /ruta/al/directorio
-        state: directory
+    - name: Instalar PostgreSQL 
