@@ -1,6 +1,20 @@
 ---
 - name: Instalar paquetes para PostgreSQL
-  hosts: tu_host
+  hosts: host1
   become: true
   tasks:
-    - name: Instalar PostgreSQL 
+    - name: Instalar PostgreSQL
+      yum:
+        name: postgresql
+        state: present
+    
+    - name: Inicializar PostgreSQL
+      shell: /usr/pgsql-13/bin/pg_ctl start -D /var/lib/pgsql/13/data/
+     
+    - name: Verificar estado del servicio PostgreSQL
+      systemd:
+        name: postgresql
+        state: started
+        enabled: yes 
+
+
