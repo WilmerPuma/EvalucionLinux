@@ -1,0 +1,8 @@
+---
+- name: Crear directorio
+  hosts: tu_host
+  tasks:
+    - name: Crear directorio
+      file:
+        path: /ruta/al/directorio
+        state: directory
