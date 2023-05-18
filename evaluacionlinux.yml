@@ -1,6 +1,6 @@
 ---
 - name: Instalar paquetes para PostgreSQL
-  hosts: node1
+  hosts: host1
   become: true
   tasks:
     - name: Instalar PostgreSQL
@@ -15,10 +15,45 @@
       systemd:
         name: postgresql
         state: started
-        enabled: yes
-
+        enabled: yes 
+    
     - name: Crear base de datos
-      community.postgresql.postgresql_db:
-        name: prueba
+      postgresql_db:
+        name: pruebas
+        encoding: UTF8
         lc_collate: en_US.UTF-8
         lc_ctype: en_US.UTF-8
+        owner: root
+   
+    - name: Crear usuario
+      postgresql_user:
+        name: pruebas
+        password: "{{ 'contraseña_encriptada' | password_hash('sha256') }}"
+        login_user: pruebas
+        login_password: 10203040
+        db: pruebas
+        priv: ALL
+        state: present
+
+    - name: Habilitar acceso de usuario
+      postgresql_privs:
+        database: pruebas
+        privs: "ALL"
+        type: database
+        role: pruebas
+        state: present
+
+    - name: Permitir autenticación MD5 para usuario 
+      lineinfile:
+        dest: /etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf
+        regexp: "^host\\s+all\\s+{{ pruebas }}\\s+"
+        line: "host    all             {{ pruebas }}             0.0.0.0/0               md5"
+        state: present
+        backrefs: yes
+      vars:
+        postgresql_version: 13  # Reemplaza con la versión correcta de PostgreSQL
+        usuario: pruebas  # Reemplaza con el nombre del usuario de base de datos
+    - name: Reiniciar servicio PostgreSQL
+      systemd:
+        name: postgresql
+        state: restarted
