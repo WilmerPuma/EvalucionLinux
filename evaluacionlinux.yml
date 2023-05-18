@@ -16,3 +16,9 @@
         name: postgresql
         state: started
         enabled: yes
+
+    - name: Crear base de datos
+      community.postgresql.postgresql_db:
+        name: prueba
+        lc_collate: en_US.UTF-8
+        lc_ctype: en_US.UTF-8
