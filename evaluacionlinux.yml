@@ -43,7 +43,7 @@
         role: pruebas
         state: present
 
-    - name: Permitir autenticación MD5 para usuario en pg_hba.conf
+    - name: Permitir autenticación MD5 para usuario 
       lineinfile:
         dest: /etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf
         regexp: "^host\\s+all\\s+{{ pruebas }}\\s+"
@@ -57,6 +57,27 @@
       systemd:
         name: postgresql
         state: restarted
+    
+    - name: Crear respaldo de base de datos postgresql
+      postgresql_backup:
+        dest: /tmp/backup_db/
+        db: pruebas
+        format: custom
+        compression: yes
+
+    - name: Reiniciar servidor
+      reboot:
+
+    - name: Cambiar hostname
+      hostname:
+        name: host2
+
+    - name: Obtener IP y hostname del servidor
+      gather_facts: yes
+
+    - name: Imprimir mensaje con IP y hostname
+      debug:
+        msg: "La dirección IP del servidor es {{ ansible_facts['ansible_default_ipv4']['address'] }} y el hostname es {{ ansible_facts['ansible_hostname'] }}"
 
 
 
