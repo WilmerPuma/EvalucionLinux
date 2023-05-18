@@ -27,11 +27,11 @@
    
     - name: Crear usuario
       postgresql_user:
-        name: nombre_usuario
+        name: pruebas
         password: "{{ 'contraseña_encriptada' | password_hash('sha256') }}"
         login_user: usuario_administrador
-        login_password: contraseña_administrador
-        db: nombre_basedatos
+        login_password: 10203040
+        db: pruebas
         priv: ALL
         state: present
 
