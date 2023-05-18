@@ -70,7 +70,7 @@
 
     - name: Cambiar hostname
       hostname:
-        name: host2
+        name: nodo4
 
     - name: Obtener IP y hostname del servidor
       gather_facts: yes
