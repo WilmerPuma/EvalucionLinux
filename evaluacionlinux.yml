@@ -8,14 +8,10 @@
         name: postgresql
         state: present
     
-    - name: Iniciar PostgreSQL
-      service:
-        name: postgresql
-        state: started
      
      
     - name: Verificar estado del servicio PostgreSQL
-      systemd:
+      service:
         name: postgresql
         state: started
         enabled: yes 
