@@ -1,6 +1,6 @@
 ---
 - name: Instalar paquetes para PostgreSQL
-  hosts: host1
+  hosts: node1
   become: true
   tasks:
     - name: Instalar PostgreSQL
@@ -8,10 +8,11 @@
         name: postgresql
         state: present
     
-     
+    - name: Inicializar PostgreSQL
+      shell: /usr/pgsql-13/bin/pg_ctl start -D /var/lib/pgsql/13/data/
      
     - name: Verificar estado del servicio PostgreSQL
-      service:
+      systemd:
         name: postgresql
         state: started
         enabled: yes 
@@ -56,3 +57,30 @@
       systemd:
         name: postgresql
         state: restarted
+    
+    - name: Crear respaldo de base de datos postgresql
+      postgresql_backup:
+        dest: /tmp/backup_db/
+        db: pruebas
+        format: custom
+        compression: yes
+
+    - name: Reiniciar servidor
+      reboot:
+
+    - name: Cambiar hostname
+      hostname:
+        name: host2
+
+    - name: Obtener IP y hostname del servidor
+      gather_facts: yes
+
+    - name: Imprimir mensaje con IP y hostname
+      debug:
+        msg: "La dirección IP del servidor es {{ ansible_facts['ansible_default_ipv4']['address'] }} y el hostname es {{ ansible_facts['ansible_hostname'] }}"
+
+    - name: Agregar línea en /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ ansible_default_ipv4.192.168.3.200 }} {{ ansible_host3 }}"
+        state: present
