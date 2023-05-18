@@ -9,7 +9,7 @@
         state: present
     
     - name: Iniciar PostgreSQL
-      systemd:
+      service:
         name: postgresql
         state: started
      
