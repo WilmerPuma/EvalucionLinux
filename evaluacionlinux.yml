@@ -1,6 +1,6 @@
 ---
 - name: Instalar paquetes para PostgreSQL
-  hosts: host1
+  hosts: node1
   become: true
   tasks:
     - name: Instalar PostgreSQL
