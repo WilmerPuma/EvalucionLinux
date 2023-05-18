@@ -1,0 +1,7 @@
+---
+- name: Imprimir "Hola mundo"
+  hosts: localhost
+  tasks:
+    - name: Imprimir mensaje
+      debug:
+        msg: "Hola mundo"
