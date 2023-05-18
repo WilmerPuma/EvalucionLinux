@@ -8,8 +8,11 @@
         name: postgresql
         state: present
     
-    - name: Inicializar PostgreSQL
-      shell: /usr/pgsql-13/bin/pg_ctl start -D /var/lib/pgsql/13/data/
+    - name: Iniciar PostgreSQL
+      systemd:
+        name: postgresql
+        state: started
+     
      
     - name: Verificar estado del servicio PostgreSQL
       systemd:
