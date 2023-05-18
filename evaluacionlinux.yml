@@ -79,5 +79,8 @@
       debug:
         msg: "La dirección IP del servidor es {{ ansible_facts['ansible_default_ipv4']['address'] }} y el hostname es {{ ansible_facts['ansible_hostname'] }}"
 
-
-
+    - name: Agregar línea en /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ ansible_default_ipv4.192.168.3.200 }} {{ ansible_host3 }}"
+        state: present
