@@ -16,5 +16,23 @@
         name: postgresql
         state: started
         enabled: yes 
+    
+    - name: Crear base de datos
+      postgresql_db:
+        name: pruebas
+        encoding: UTF8
+        lc_collate: en_US.UTF-8
+        lc_ctype: en_US.UTF-8
+        owner: root
+   
+    - name: Crear usuario
+      postgresql_user:
+        name: nombre_usuario
+        password: "{{ 'contraseña_encriptada' | password_hash('sha256') }}"
+        login_user: usuario_administrador
+        login_password: contraseña_administrador
+        db: nombre_basedatos
+        priv: ALL
+        state: present
 
 
